@@ -1,7 +1,6 @@
 import { defineConfig } from 'astro/config';
 
-// Served by GitHub Pages from the BrewCode-Tech/mathi_portfolio repo.
+// Served by GitHub Pages from the mathi1322/mathi1322.github.io repo, at the root.
 export default defineConfig({
-  site: 'https://brewcode-tech.github.io',
-  base: '/mathi_portfolio/',
+  site: 'https://mathi1322.github.io',
 });

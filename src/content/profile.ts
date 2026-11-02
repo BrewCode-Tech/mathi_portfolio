@@ -2,7 +2,7 @@
 // Numbers marked TODO(metric) are waiting on real figures — never invent them.
 
 export const site = {
-  url: 'https://brewcode-tech.github.io/mathi_portfolio',
+  url: 'https://mathi1322.github.io',
   title: 'Mathivanan S — Lead Full Stack Engineer, AI/LLM',
   description:
     'Lead Full Stack Engineer with 5.5 years shipping SaaS and LLM-powered products for US clients. React, TypeScript, Python, Rails, PostgreSQL, OpenAI and Claude.',
