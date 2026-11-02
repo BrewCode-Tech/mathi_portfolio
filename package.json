@@ -1,0 +1,17 @@
+{
+  "name": "mathi1322.github.io",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build && node scripts/resume-pdf.mjs",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "astro": "^7.4.5"
+  },
+  "devDependencies": {
+    "playwright": "^1.56.1"
+  }
+}
