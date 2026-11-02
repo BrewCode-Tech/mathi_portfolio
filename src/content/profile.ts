@@ -24,7 +24,7 @@ export const person = {
   pitch:
     'I build LLM features that survive production — the prompt, the fallback, the validation, the queue behind it, and the UI on top.',
   summary: [
-    '5.5 years building SaaS and AI products for US clients, promoted from QA to Lead at one company.',
+    'Full stack engineer with 5.5 years building SaaS and AI products for US clients, promoted from QA to Lead at one company.',
     'Ships production LLM features: AI outreach email at 1,000–1,500 sends a day, document extraction with multi-model fallback, and natural-language querying over business data.',
     'Most recently led a team of 4 engineers as the technical bridge between US stakeholders and the India team.',
   ],

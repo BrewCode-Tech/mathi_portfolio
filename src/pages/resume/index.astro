@@ -15,13 +15,12 @@ const host = site.url.replace('https://', '');
     <header>
       <h1>{person.name}</h1>
       <p class="hl">{person.headline}</p>
-      <p class="contact">
-        {person.location} · {person.availability}<br />
-        {person.phone} · <a href={`mailto:${person.email}`}>{person.email}</a><br />
-        <a href={site.url}>{host}</a>{' · '}
-        <a href={person.links.linkedin}>linkedin.com/in/mathi-s</a>{' · '}
-        <a href={person.links.github}>github.com/mathi1322</a>
-      </p>
+      <div class="contact">
+        <p>{[person.location, ...person.availability.split(' · ')].map((x, i) => <>{i > 0 && <i>|</i>}<span>{x}</span></>)}<i>|</i><a href={`tel:${person.phone.replace(/\s/g, '')}`}>{person.phone}</a></p>
+        <p>
+          <a href={`mailto:${person.email}`}>{person.email}</a><i>|</i><a href={site.url}>{host}</a><i>|</i><a href={person.links.linkedin}>linkedin.com/in/mathi-s</a><i>|</i><a href={person.links.github}>github.com/mathi1322</a>
+        </p>
+      </div>
     </header>
 
     <h2>Summary</h2>
@@ -39,7 +38,7 @@ const host = site.url.replace('https://', '');
         <p class="rt"><strong>{r.title}</strong><span class="r">{r.dates}</span></p>
         {r.engagements.map((e) => (
           <>
-            {e.product && <p class="ctx">{[e.product, e.stack].filter(Boolean).join(' · ')}</p>}
+            {e.product && <p class="ctx"><span class="prod">{e.product}</span>{e.stack && <>{' · '}<span class="stk">{e.stack}</span></>}</p>}
             {e.bullets.length > 0 && <ul>{e.bullets.map((b) => <li>{b}</li>)}</ul>}
           </>
         ))}
@@ -49,7 +48,7 @@ const host = site.url.replace('https://', '');
     <h2>Projects</h2>
     {sideProjects.map((p) => (
       <div class="role">
-        <p class="rt"><span><strong>{p.name}</strong>{p.stack && <> · {p.stack.join(', ')}</>}</span><span class="r">{p.live ? <a href={p.live}>live demo</a> : p.repo ? <a href={p.repo}>GitHub</a> : p.repoNote && 'private · demo on portfolio'}</span></p>
+        <p class="rt"><span><strong>{p.name}</strong>{p.stack && <>{' · '}<span class="stk">{p.stack.join(', ')}</span></>}</span><span class="r">{p.live ? <a href={p.live}>live demo</a> : p.repo && <a href={p.repo}>GitHub</a>}</span></p>
         <ul><li>{p.summary ?? p.tagline}</li>{p.how && <li>{p.how}</li>}</ul>
       </div>
     ))}
@@ -64,38 +63,52 @@ const host = site.url.replace('https://', '');
   .tools { display: flex; justify-content: space-between; align-items: center; padding-top: 20px; padding-bottom: 20px; }
   .tools a:not(.btn) { font-size: 14px; color: var(--ink-2); text-decoration: none; }
   .sheet {
-    max-width: 820px; margin: 0 auto 64px; padding: 40px 44px;
+    max-width: 820px; margin: 0 auto 64px; padding: 44px 48px;
     background: var(--card); border: 1px solid var(--line); border-radius: 6px;
-    font-size: 14px; line-height: 1.5;
+    font-size: 15px; line-height: 1.5;
   }
-  @media (max-width: 640px) { .sheet { margin: 0 16px 48px; padding: 24px 18px; } }
-  h1 { font-size: 32px; }
-  .hl { font-weight: 600; margin: 4px 0 6px; }
-  .contact { margin: 0; color: var(--ink-2); font-size: 13px; }
-  h2 { font: 600 12px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin: 22px 0 8px; padding-bottom: 6px; border-bottom: 1px solid var(--line); }
+  @media (max-width: 640px) { .sheet { margin: 0 16px 48px; padding: 24px 18px; font-size: 14px; } }
+  header { text-align: center; }
+  h1 { font-size: 34px; font-weight: 700; letter-spacing: .01em; text-transform: uppercase; }
+  .hl { font-size: 17px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; margin: 6px 0 12px; }
+  .contact { border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); padding: 7px 0; font-size: 14px; }
+  .contact p { margin: 1px 0; }
+  .contact i { font-style: normal; margin: 0 8px; color: var(--ink-3); }
+  .contact a, .contact span { white-space: nowrap; }
+  .contact a, .r a { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; text-decoration-color: color-mix(in srgb, currentColor 45%, transparent); }
+  .contact a:hover, .r a:hover { text-decoration-color: currentColor; }
+  h2 { font: 700 16px/1.2 var(--sans); letter-spacing: .03em; text-transform: uppercase; color: var(--ink); margin: 22px 0 8px; padding-bottom: 5px; border-bottom: 1px solid var(--ink); }
   p { margin: 0 0 4px; }
-  ul { margin: 2px 0 8px; padding-left: 18px; }
-  li { margin: 1px 0; }
+  ul { margin: 3px 0 8px; padding-left: 20px; }
+  li { margin: 2px 0; }
   .skills { list-style: none; padding: 0; }
-  .summary { line-height: 1.5; }
   .co, .rt { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
   .co > :first-child, .rt > :first-child { flex: 1; min-width: 0; }
-  .r { color: var(--ink-3); font-size: 13px; white-space: nowrap; }
-  .ctx { color: var(--ink-2); font-style: italic; font-size: 13px; }
-  .role { margin-top: 8px; }
+  .rt strong, .co strong { font-weight: 700; }
+  .r { font-weight: 700; white-space: nowrap; }
+  .ctx { margin-top: 2px; }
+  .prod { font-weight: 600; }
+  .stk { color: var(--ink-2); display: inline-block; } /* wraps as a unit, never one orphan word */
+  .rt .stk { color: inherit; }
+  .role { margin-top: 10px; }
   li { break-inside: avoid; }
   .rt, .ctx, h2 { break-after: avoid; }
 
   @media print {
-    @page { size: A4; margin: 10mm 13mm; }
+    @page { size: A4; margin: 11mm 13mm; }
     :global(.top), :global(.foot), .tools { display: none !important; }
     :global(html), :global(body) { background: #fff !important; color: #000 !important; }
-    .sheet { border: 0; margin: 0; padding: 0; max-width: none; background: #fff; font-size: 9.8pt; line-height: 1.38; color: #000; }
-    h2 { margin: 12px 0 5px; }
-    ul { margin: 1px 0 4px; }
-    .role { margin-top: 5px; }
+    .sheet { border: 0; margin: 0; padding: 0; max-width: none; background: #fff; font-size: 10.5pt; line-height: 1.38; color: #000; }
     .sheet * { color: #000 !important; }
-    h2 { color: #0f6b55 !important; border-color: #bbb; }
-    a { text-decoration: none; }
+    h1 { font-size: 22pt; }
+    .hl { font-size: 12pt; margin: 3px 0 8px; }
+    .contact { font-size: 9.8pt; padding: 5px 0; border-color: #000; }
+    .contact i { color: #000 !important; }
+    h2 { font-size: 11.5pt; margin: 12px 0 5px; padding-bottom: 3px; border-color: #000; }
+    ul { margin: 1px 0 4px; }
+    li { margin: 1px 0; }
+    .role { margin-top: 6px; }
+    .stk { color: #333 !important; }
+    .contact a, .r a { text-decoration-color: #888; }
   }
 </style>
