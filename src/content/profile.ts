@@ -196,8 +196,8 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    slug: 'ocr-billing',
-    name: 'OCR Billing App',
+    slug: 'billcheck',
+    name: 'BillCheck',
     kind: 'Own project',
     tagline: 'Invoice extraction where a cheap model goes first and a second model is called only when a deterministic check says the answer is weak.',
     summary:
@@ -290,8 +290,8 @@ export const projects: Project[] = [
   },
 
   {
-    slug: 'exam-answer-checker',
-    name: 'Exam Answer Checker',
+    slug: 'scorecheck',
+    name: 'ScoreCheck',
     kind: 'Own project',
     tagline: 'Scores TNPSC and TCS iON response sheets against an answer key whose questions are in a different order — with classical maths first and an LLM last.',
     summary:
