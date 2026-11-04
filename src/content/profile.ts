@@ -135,7 +135,7 @@ export const roles: Role[] = [
     ],
   },
   {
-    title: 'Trainee',
+    title: 'Intern',
     dates: 'Feb 2021 – Apr 2021',
     engagements: [{ bullets: [] }],
   },
