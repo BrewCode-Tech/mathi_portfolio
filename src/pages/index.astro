@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import Flow from '../components/Flow.astro';
-import { person, highlights, roles, company, projects, skills, education } from '../content/profile';
+import { person, highlights, roles, company, currentFocus, projects, skills, education } from '../content/profile';
 
 const base = import.meta.env.BASE_URL;
 const ladder = ['Intern', 'QA Engineer', 'Full Stack', 'Senior', 'Lead'];
@@ -50,7 +50,11 @@ const ladder = ['Intern', 'QA Engineer', 'Full Stack', 'Senior', 'Lead'];
             <a class="card" href={`${base}projects/${p.slug}/`}>
               <div class="card-top">
                 <span class="eyebrow">{p.kind}</span>
-                <span class="arrow" aria-hidden="true">→</span>
+                <span class="links">
+                  {p.live && <span class="badge live">Live</span>}
+                  {p.repo && <span class="badge">Code</span>}
+                  <span class="arrow" aria-hidden="true">→</span>
+                </span>
               </div>
               <h3>{p.name}</h3>
               <p class="muted">{p.tagline}</p>
@@ -68,6 +72,13 @@ const ladder = ['Intern', 'QA Engineer', 'Full Stack', 'Senior', 'Lead'];
         <ol class="ladder" aria-label="Promotion path">
           {ladder.map((r, i) => <li style={`--i:${i}`}>{r}</li>)}
         </ol>
+        <article class="now">
+          <div class="when">{currentFocus.dates}</div>
+          <div>
+            <h3>{currentFocus.title}</h3>
+            <ul>{currentFocus.bullets.map((b) => <li>{b}</li>)}</ul>
+          </div>
+        </article>
         <p class="co"><strong>{company.name}</strong>, {company.place} · <span class="muted">{company.dates} · all client work for US products</span></p>
         <div class="timeline">
           {roles.map((r) => (
@@ -168,6 +179,10 @@ const ladder = ['Intern', 'QA Engineer', 'Full Stack', 'Senior', 'Lead'];
   .card:first-child { border-color: color-mix(in srgb, var(--accent) 40%, var(--line)); }
   @media (min-width: 760px) { .card:first-child { grid-column: 1 / -1; } .card:first-child h3 { font-size: 28px; } .card:first-child p { max-width: 70ch; } }
   .card-top { display: flex; justify-content: space-between; align-items: center; }
+  .links { display: inline-flex; align-items: center; gap: 8px; }
+  .badge { font: 500 12px/1 var(--sans); padding: 5px 9px; border-radius: 999px; border: 1px solid var(--line); color: var(--ink-2); }
+  .badge.live { display: inline-flex; align-items: center; gap: 6px; color: var(--accent); border-color: color-mix(in srgb, var(--accent) 35%, var(--line)); }
+  .badge.live::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
   .arrow { color: var(--ink-3); transition: transform .15s ease; }
   .card:hover .arrow { transform: translateX(3px); color: var(--accent); }
   .card h3 { font-size: 23px; }
@@ -182,14 +197,15 @@ const ladder = ['Intern', 'QA Engineer', 'Full Stack', 'Senior', 'Lead'];
   }
   .ladder li:last-child { color: var(--accent-ink); }
   .co { margin: 0 0 20px; }
-  .timeline article { display: grid; gap: 4px 28px; padding: 22px 0; border-top: 1px dashed var(--line); }
-  @media (min-width: 760px) { .timeline article { grid-template-columns: 170px 1fr; } }
+  .now { margin: 0 0 28px; }
+  .timeline article, .now { display: grid; gap: 4px 28px; padding: 22px 0; border-top: 1px dashed var(--line); }
+  @media (min-width: 760px) { .timeline article, .now { grid-template-columns: 170px 1fr; } }
   .when { font: 500 13px/1.6 var(--mono); color: var(--ink-3); }
-  .timeline h3 { font: 600 18px/1.35 var(--sans); }
+  .timeline h3, .now h3 { font: 600 18px/1.35 var(--sans); }
   .eng + .eng { margin-top: 16px; }
   .ctx { margin: 6px 0 4px; font-size: 15px; font-weight: 500; color: var(--accent); }
-  .timeline ul { margin: 6px 0 0; padding-left: 18px; color: var(--ink-2); font-size: 16px; }
-  .timeline li { margin: 4px 0; }
+  .timeline ul, .now ul { margin: 6px 0 0; padding-left: 18px; color: var(--ink-2); font-size: 16px; }
+  .timeline li, .now li { margin: 4px 0; }
   .stack { margin: 8px 0 0; font: 400 13px/1.5 var(--mono); color: var(--ink-3); }
 
   .skills { display: grid; gap: 28px; }

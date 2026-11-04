@@ -1,6 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { person, roles, company, projects, skills, education, site } from '../../content/profile';
+import { person, roles, company, currentFocus, projects, skills, education, site } from '../../content/profile';
 
 const base = import.meta.env.BASE_URL;
 const sideProjects = projects.filter((p) => p.kind === 'Own project' && p.onResume !== false);
@@ -32,6 +32,10 @@ const host = site.url.replace('https://', '');
     </ul>
 
     <h2>Experience</h2>
+    <div class="role now">
+      <p class="rt"><strong>{currentFocus.title}</strong><span class="r">{currentFocus.dates}</span></p>
+      <ul>{currentFocus.bullets.map((b) => <li>{b}</li>)}</ul>
+    </div>
     <p class="co"><span><strong>{company.name}</strong>, {company.place}</span><span class="r">{company.dates}</span></p>
     {roles.map((r) => (
       <div class="role">
@@ -91,6 +95,7 @@ const host = site.url.replace('https://', '');
   .stk { color: var(--ink-2); display: inline-block; } /* wraps as a unit, never one orphan word */
   .rt .stk { color: inherit; }
   .role { margin-top: 10px; }
+  .now { margin: 0 0 10px; }
   li { break-inside: avoid; }
   .rt, .ctx, h2 { break-after: avoid; }
 

@@ -50,6 +50,16 @@ export type Role = {
   engagements: Engagement[];
 };
 
+// Since leaving Drylogic: shown above it in the experience timeline and on the resume.
+export const currentFocus = {
+  title: 'Upskilling and building my own AI products',
+  dates: 'Aug 2026 – Present',
+  bullets: [
+    'Keeping up with the latest AI tooling hands-on: OpenAI and Claude APIs, Gemini, Groq, structured outputs, multi-model fallback and AI search.',
+    'Designing and shipping small AI tools end to end: CiteCheck (live), BillCheck and ScoreCheck.',
+  ],
+};
+
 export const company = {
   name: 'Drylogic Solutions',
   place: 'Coimbatore',
@@ -196,6 +206,80 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    slug: 'citecheck',
+    name: 'CiteCheck',
+    kind: 'Own project',
+    tagline: 'Shows whether your website gets cited when people ask AI assistants about what you sell — and what to fix if it doesn’t.',
+    summary:
+      'Shows a business whether AI assistants cite its website when buyers ask about what it sells, and gives a ranked list of fixes.',
+    how:
+      'Asks an AI search engine real buyer questions, records the cited sites, checks whether AI crawlers can read the site, and compares it with the pages that won.',
+    stack: ['Python', 'FastAPI', 'Tavily', 'Groq', 'Gemini'],
+    live: 'https://citecheck-ysjl.onrender.com/',
+    problem:
+      'Buyers increasingly ask an AI assistant instead of scrolling search results. A business has no easy way to see whether those answers cite its site, which competitors get cited instead, or why.',
+    role: 'Solo build: product idea, backend, AI search integration, scoring and the recommendations engine.',
+    flow: [
+      { label: 'Ask', detail: '10–20 buyer questions (written from your homepage, or your own) go to an AI search engine', tone: 'ai' },
+      { label: 'Record', detail: 'Capture the cited sources, and the search results the AI read' },
+      { label: 'AI memory', detail: 'Does a model name you with no web search at all?', tone: 'ai' },
+      { label: 'Crawl check', detail: 'robots.txt AI crawlers, noindex, canonical, JS-only pages, sitemap', tone: 'guard' },
+      { label: 'Compare', detail: 'Cited pages vs your closest page: direct answer, depth, headings, freshness' },
+      { label: 'Fix list', detail: 'Ranked high / medium / off-site / low, each with its evidence', tone: 'human' },
+    ],
+    decisions: [
+      {
+        title: '“Not found” and “not chosen” are different problems',
+        body: 'The report separates questions where your site never appeared in the search results the AI read (an SEO problem) from ones where it appeared but wasn’t cited (a content problem). Each needs a different fix.',
+      },
+      {
+        title: 'Be honest about what is certain',
+        body: 'Technical checks are pass/fail: a page AI crawlers can’t read can’t be cited. Content comparisons are shown as patterns in pages that did get cited, not as ranking factors, and answers that vary run to run are labelled as noise.',
+      },
+      {
+        title: 'Runs on free tiers',
+        body: 'The default engine is Tavily search plus a free Groq model, the same search-then-cite design as AI search products. Gemini with Google Search grounding is optional, a demo mode needs no keys, and paste mode checks real ChatGPT or Perplexity answers.',
+      },
+    ],
+    results: ['Live and publicly usable, no login', 'Quick check in about 10 seconds; full report with share of voice per domain', 'Before/after comparison to see whether changes worked'],
+    shots: [
+      { src: 'shots/citecheck-report.jpg', alt: 'CiteCheck report: visibility score 50/100, 5 of 10 questions cited, 11 fixes found, with the top high-priority fixes listed', caption: 'The report summary and the first ranked fixes (example report).', width: 1600, height: 1127 },
+      { src: 'shots/citecheck-cited.jpg', alt: 'Table of which sites AI engines cite, with share of citations and average position, the user’s site highlighted', caption: 'Who AI engines cite instead: share of voice per domain.', width: 1600, height: 853 },
+    ],
+  },
+  {
+    slug: 'ai-email-engine',
+    name: 'AI Outreach Email Engine',
+    kind: 'Client work',
+    tagline: 'Personalized AI emails at 1,000–1,500 sends a day, scheduled across ~40 mailboxes so none of them lands in spam.',
+    stack: ['React', 'TypeScript', 'Python', 'FastAPI', 'PostgreSQL', 'OpenAI', 'Perplexity', 'EmailEngine', 'Stripe'],
+    problem:
+      'A US sales outreach platform needed every email researched and written for its recipient, then sent from each customer’s pool of mailboxes on the customer’s schedule — with follow-ups that stop the moment a lead replies, and without any mailbox getting flagged as spam.',
+    role: 'Senior Full Stack Engineer: generation pipeline, scheduling algorithm, job system, payments and mailbox integration.',
+    flow: [
+      { label: 'Research', detail: 'Perplexity gathers recent, public context about the lead', tone: 'ai' },
+      { label: 'Write', detail: 'ChatGPT drafts a personalized email from the research and campaign brief', tone: 'ai' },
+      { label: 'Schedule', detail: 'Max 50 sends per mailbox per day, only on the customer’s chosen days', tone: 'guard' },
+      { label: 'Follow up', detail: 'Follow-up after the customer’s chosen gap — cancelled if the lead replies', tone: 'guard' },
+      { label: 'Track', detail: 'Analytics: sent, remaining in the set, replies' },
+    ],
+    decisions: [
+      {
+        title: 'A hard per-mailbox cap',
+        body: 'Each mailbox sends at most 50 emails a day. With 4 customers and about 10 mailboxes each, the scheduler spreads 1,000–1,500 daily sends so no single mailbox spikes and gets flagged as spam.',
+      },
+      {
+        title: 'Replies cancel follow-ups, per lead',
+        body: 'When a lead replies to the first email, only that lead’s queued follow-up is cancelled. Nobody gets a “just following up” after they have already answered.',
+      },
+      {
+        title: 'Separate research from writing',
+        body: 'Splitting retrieval (Perplexity) from generation (ChatGPT) made each step testable on its own and kept facts and tone as separate concerns.',
+      },
+    ],
+    results: ['1,000–1,500 personalized emails a day across 4 customers and ~40 mailboxes', 'Follow-ups cancelled automatically on reply', 'Campaign analytics: sent, remaining and replies'],
+  },
+  {
     slug: 'billcheck',
     name: 'BillCheck',
     kind: 'Own project',
@@ -247,49 +331,6 @@ export const projects: Project[] = [
     ],
   },
   {
-    slug: 'citecheck',
-    name: 'CiteCheck',
-    kind: 'Own project',
-    tagline: 'Shows whether your website gets cited when people ask AI assistants about what you sell — and what to fix if it doesn’t.',
-    summary:
-      'Shows a business whether AI assistants cite its website when buyers ask about what it sells, and gives a ranked list of fixes.',
-    how:
-      'Asks an AI search engine real buyer questions, records the cited sites, checks whether AI crawlers can read the site, and compares it with the pages that won.',
-    stack: ['Python', 'FastAPI', 'Tavily', 'Groq', 'Gemini'],
-    live: 'https://citecheck-ysjl.onrender.com/',
-    problem:
-      'Buyers increasingly ask an AI assistant instead of scrolling search results. A business has no easy way to see whether those answers cite its site, which competitors get cited instead, or why.',
-    role: 'Solo build: product idea, backend, AI search integration, scoring and the recommendations engine.',
-    flow: [
-      { label: 'Ask', detail: '10–20 buyer questions (written from your homepage, or your own) go to an AI search engine', tone: 'ai' },
-      { label: 'Record', detail: 'Capture the cited sources, and the search results the AI read' },
-      { label: 'AI memory', detail: 'Does a model name you with no web search at all?', tone: 'ai' },
-      { label: 'Crawl check', detail: 'robots.txt AI crawlers, noindex, canonical, JS-only pages, sitemap', tone: 'guard' },
-      { label: 'Compare', detail: 'Cited pages vs your closest page: direct answer, depth, headings, freshness' },
-      { label: 'Fix list', detail: 'Ranked high / medium / off-site / low, each with its evidence', tone: 'human' },
-    ],
-    decisions: [
-      {
-        title: '“Not found” and “not chosen” are different problems',
-        body: 'The report separates questions where your site never appeared in the search results the AI read (an SEO problem) from ones where it appeared but wasn’t cited (a content problem). Each needs a different fix.',
-      },
-      {
-        title: 'Be honest about what is certain',
-        body: 'Technical checks are pass/fail: a page AI crawlers can’t read can’t be cited. Content comparisons are shown as patterns in pages that did get cited, not as ranking factors, and answers that vary run to run are labelled as noise.',
-      },
-      {
-        title: 'Runs on free tiers',
-        body: 'The default engine is Tavily search plus a free Groq model, the same search-then-cite design as AI search products. Gemini with Google Search grounding is optional, a demo mode needs no keys, and paste mode checks real ChatGPT or Perplexity answers.',
-      },
-    ],
-    results: ['Live and publicly usable, no login', 'Quick check in about 10 seconds; full report with share of voice per domain', 'Before/after comparison to see whether changes worked'],
-    shots: [
-      { src: 'shots/citecheck-report.jpg', alt: 'CiteCheck report: visibility score 50/100, 5 of 10 questions cited, 11 fixes found, with the top high-priority fixes listed', caption: 'The report summary and the first ranked fixes (example report).', width: 1600, height: 1127 },
-      { src: 'shots/citecheck-cited.jpg', alt: 'Table of which sites AI engines cite, with share of citations and average position, the user’s site highlighted', caption: 'Who AI engines cite instead: share of voice per domain.', width: 1600, height: 853 },
-    ],
-  },
-
-  {
     slug: 'scorecheck',
     name: 'ScoreCheck',
     kind: 'Own project',
@@ -330,39 +371,6 @@ export const projects: Project[] = [
       { src: 'shots/exam-results.jpg', alt: 'Results page: 15.0 marks out of 18, 10 correct, 1 wrong, 1 unanswered, with a table of every question', caption: 'Results: score, counts and every question’s match (synthetic sample).', width: 1600, height: 1203 },
     ],
   },
-
-  {
-    slug: 'ai-email-engine',
-    name: 'AI Outreach Email Engine',
-    kind: 'Client work',
-    tagline: 'Personalized AI emails at 1,000–1,500 sends a day, scheduled across ~40 mailboxes so none of them lands in spam.',
-    stack: ['React', 'TypeScript', 'Python', 'FastAPI', 'PostgreSQL', 'OpenAI', 'Perplexity', 'EmailEngine', 'Stripe'],
-    problem:
-      'A US sales outreach platform needed every email researched and written for its recipient, then sent from each customer’s pool of mailboxes on the customer’s schedule — with follow-ups that stop the moment a lead replies, and without any mailbox getting flagged as spam.',
-    role: 'Senior Full Stack Engineer: generation pipeline, scheduling algorithm, job system, payments and mailbox integration.',
-    flow: [
-      { label: 'Research', detail: 'Perplexity gathers recent, public context about the lead', tone: 'ai' },
-      { label: 'Write', detail: 'ChatGPT drafts a personalized email from the research and campaign brief', tone: 'ai' },
-      { label: 'Schedule', detail: 'Max 50 sends per mailbox per day, only on the customer’s chosen days', tone: 'guard' },
-      { label: 'Follow up', detail: 'Follow-up after the customer’s chosen gap — cancelled if the lead replies', tone: 'guard' },
-      { label: 'Track', detail: 'Analytics: sent, remaining in the set, replies' },
-    ],
-    decisions: [
-      {
-        title: 'A hard per-mailbox cap',
-        body: 'Each mailbox sends at most 50 emails a day. With 4 customers and about 10 mailboxes each, the scheduler spreads 1,000–1,500 daily sends so no single mailbox spikes and gets flagged as spam.',
-      },
-      {
-        title: 'Replies cancel follow-ups, per lead',
-        body: 'When a lead replies to the first email, only that lead’s queued follow-up is cancelled. Nobody gets a “just following up” after they have already answered.',
-      },
-      {
-        title: 'Separate research from writing',
-        body: 'Splitting retrieval (Perplexity) from generation (ChatGPT) made each step testable on its own and kept facts and tone as separate concerns.',
-      },
-    ],
-    results: ['1,000–1,500 personalized emails a day across 4 customers and ~40 mailboxes', 'Follow-ups cancelled automatically on reply', 'Campaign analytics: sent, remaining and replies'],
-  },
   {
     slug: 'responses-api-migration',
     name: 'Assistants → Responses API Migration',
@@ -389,5 +397,5 @@ export const projects: Project[] = [
       },
     ],
     results: ['Simpler AI service code', 'Lower operational overhead', 'On OpenAI’s supported API going forward'],
-  },
+  }
 ];
